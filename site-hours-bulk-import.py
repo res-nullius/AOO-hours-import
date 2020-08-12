@@ -1,14 +1,7 @@
 import pandas as pd, xlrd, json
 from itertools import count
 
-# input_default_mode = str(input("Confirm: run default mode (upload template named \"HoursChange_BulkUpload\" and script are in the same folder, Y / N)? "))
-# if input_default_mode.lower() == "n":
-#     input_new = input("Enter the full path to the Excel upload template, including the filename with \".xlsx\" (no quotation marks): ")
-#     excel_file = input_new
-# else:
-excel_file = 'HoursChanges_BulkUpload.xlsx'
-
-# excel_file = r'C:/Users/sg185393/Potbelly/HoursChanges_BulkUpload.xlsx' # set the path to the upload template (when in the right folder, right-click and copy the filepath)
+excel_file = 'HoursChanges_BulkUpload.xlsx' # set the path to the upload template (when in the right folder, right-click and copy the filepath)
 hours_sheet = 0 # set the sheet number with the hours on it, left to right counting from 0
 AO_Site_ID = 0 # set the column number with the AO Site IDs in it, counting from 0
 import_items = pd.read_excel(excel_file, sheet_name=hours_sheet, usecols="C:AS", index_col=AO_Site_ID)
@@ -22,7 +15,7 @@ for i, site in enumerate(import_items):
         sites['Sites'].append( { "SiteID": int(import_items.index.values[i]), "StoreHours": [], "DeliveryHours": [] }) # creates a single site and puts it in Sites container
         for j, day in zip(count(step=6), days): # loops thru the site's store hours for each day of week and adds it to a single site
             sites['Sites'][i]['StoreHours'].append( {"DayOfWeek": day, "IsClosed": str(df.iloc[i,j+2]), "OpeningTime": str(df.iloc[i,j]), "ClosingTime": str(df.iloc[i,j+1]) } ) # site hours
-            sites['Sites'][i]['DeliveryHours'].append( {"DayOfWeek": day, "IsClosed": str(df.iloc[i,j+5]), "Delivery1Start": str(df.iloc[i,j+3]), "Delivery1End": str(df.iloc[i,j+4]) } ) # delivery hours
+            sites['Sites'][i]['DeliveryHours'].append( {"DayOfWeek": day, "IsClosedForDelivery": str(df.iloc[i,j+5]), "Delivery1Start": str(df.iloc[i,j+3]), "Delivery1End": str(df.iloc[i,j+4]) } ) # delivery hours
 
 with open("JSON-call.txt", "w") as file: # creates & writes the JSON call to a text file
     file.write(json.dumps(sites, indent=4))
