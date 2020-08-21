@@ -1,4 +1,4 @@
-Welcome to the NCR bulk site hour upload program!
+Welcome to the bulk site hour upload program!
 
 See the Jupyter Notebook for full documentation and step-by-step instructions.
 1. Download Python for your type of device: https://www.python.org/downloads/
